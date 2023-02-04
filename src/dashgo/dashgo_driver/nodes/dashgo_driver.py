@@ -721,7 +721,7 @@ class BaseController:
                 res = self.Stm32.start_automatic_recharge()
                 self.is_recharge = True
             except:
-		rospy.logerr("start automatic recharge exception ")
+                rospy.logerr("start automatic recharge exception ")
         else:
             try:
                 res = self.Stm32.stop_automatic_recharge()
@@ -768,41 +768,41 @@ class BaseController:
                 rospy.logerr("request the version of hardware exception ")
         if req.data==2:
             try:
-	        res,ver0,ver1,ver2,ver3 = self.Stm32.get_firmware_version()
-		self.version_pub.publish(str(ver0)+"."+str(ver1)+"-"+str(ver2)+"."+str(ver3))
+                res,ver0,ver1,ver2,ver3 = self.Stm32.get_firmware_version()
+                self.version_pub.publish(str(ver0)+"."+str(ver1)+"-"+str(ver2)+"."+str(ver3))
                 if res==self.FAIL:
                     rospy.logerr("request the version of firmware failed ")
             except:
-		self.version_pub.publish("")
+                self.version_pub.publish("")
                 rospy.logerr("request the version of firmware exception ")
 
     def reqPidCallback(self, req):
         if req.data=='P':
             try:
-	        res,pl,pr = self.Stm32.get_pid(0x07)
-		self.pid_p_pub.publish(str(pl) + "," + str(pr))
+                res,pl,pr = self.Stm32.get_pid(0x07)
+                self.pid_p_pub.publish(str(pl) + "," + str(pr))
                 if res==self.FAIL:
                     rospy.logerr("request the P of PID failed ")
             except:
-		    self.pid_p_pub.publish("")
+                    self.pid_p_pub.publish("")
                     rospy.logerr("request the P of PID exception ")
         if req.data=='I':
             try:
-	        res,il,ir = self.Stm32.get_pid(0x09)
-		self.pid_i_pub.publish(str(il) + "," + str(ir))
+                res,il,ir = self.Stm32.get_pid(0x09)
+                self.pid_i_pub.publish(str(il) + "," + str(ir))
                 if res==self.FAIL:
                     rospy.logerr("request the I of PID failed ")
             except:
-		    self.pid_i_pub.publish("")
+                    self.pid_i_pub.publish("")
                     rospy.logerr("request the I of PID exception ")
         if req.data=='D':
             try:
-	        res,dl,dr = self.Stm32.get_pid(0x0B)
-		self.pid_d_pub.publish(str(dl) + "," + str(dr))
+                res,dl,dr = self.Stm32.get_pid(0x0B)
+                self.pid_d_pub.publish(str(dl) + "," + str(dr))
                 if res==self.FAIL:
                     rospy.logerr("request the D of PID failed ")
             except:
-		self.pid_d_pub.publish("")
+                self.pid_d_pub.publish("")
                 rospy.logerr("request the D of PID exception ")
 
     def reqSetPidCallback(self, req):
@@ -940,32 +940,32 @@ class BaseController:
                 return
                       
             try:
-	        res,vol1,vol2,vol3,vol4,vol5,vol6 = self.Stm32.get_voltage()
+                res,vol1,vol2,vol3,vol4,vol5,vol6 = self.Stm32.get_voltage()
                 self.lwheel_ele = vol3*4
                 self.lwheel_ele_pub.publish(self.lwheel_ele)
                 self.rwheel_ele = vol4*4
                 self.rwheel_ele_pub.publish(self.rwheel_ele)
                 self.voltage_val = vol5
-		self.voltage_pub.publish(self.voltage_val)
+                self.voltage_pub.publish(self.voltage_val)
                 self.voltage_str_pub.publish(str(vol1) + "," + str(vol2) + "," + str(vol3) + "," + str(vol4) + "," + str(vol5) + "," + str(vol6))
                 self.voltage_percentage_pub.publish(self.volTransPerentage(self.voltage_val))
                 #rospy.loginfo("voltage_Perentage:" + str(self.volTransPerentage(self.voltage_val)))
-	    except:
-		self.voltage_pub.publish(-1)
+            except:
+                self.voltage_pub.publish(-1)
                 self.voltage_str_pub.publish("")
                 self.lwheel_ele_pub.publish(-1)
                 self.rwheel_ele_pub.publish(-1)
                 rospy.logerr("get voltage exception")
 
             try:
-	        res,ir1,ir2,ir3,ir4,ir5,ir6 = self.Stm32.get_infrareds()
+                res,ir1,ir2,ir3,ir4,ir5,ir6 = self.Stm32.get_infrareds()
                 self.ir0_pub.publish(ir1)
                 self.ir1_pub.publish(ir2)
                 self.ir2_pub.publish(ir3)
                 self.ir3_pub.publish(ir4)
                 self.ir4_pub.publish(ir5)
                 self.ir5_pub.publish(ir6)
-	    except:
+            except:
                 self.ir0_pub.publish(-1)
                 self.ir1_pub.publish(-1)
                 self.ir2_pub.publish(-1)
@@ -974,35 +974,35 @@ class BaseController:
                 self.ir5_pub.publish(-1)
                 rospy.logerr("get infrared ray exception")
 
-	    try:
-	        res,way = self.Stm32.get_recharge_way()
+            try:
+                res,way = self.Stm32.get_recharge_way()
                 self.recharge_way = way
                 #self.recharge_way_pub.publish(ways)
                 self.recharge_way_pub.publish(self.recharge_way)
-	    except Exception,e:
+            except Exception,e:
                 #print str(e)
-		self.recharge_way_pub.publish(-1)
+                self.recharge_way_pub.publish(-1)
                 rospy.logerr("get recharge_way  exception")
 
-	    try:
-	        res,status = self.Stm32.get_automatic_recharge_status()
+            try:
+                res,status = self.Stm32.get_automatic_recharge_status()
                 self.recharge_status = status
                 if self.recharge_status == 3:
                     self.is_recharge = False
                 self.recharge_pub.publish(self.recharge_status)
-	    except:
-		self.recharge_pub.publish(-1)
+            except:
+                self.recharge_pub.publish(-1)
                 rospy.logerr("get recharge_status  exception")
 
             if (not self.is_recharge):
-	        try:
-	            res,eme_val,rech_val  = self.Stm32.get_embtn_recharge()
+                try:
+                    res,eme_val,rech_val  = self.Stm32.get_embtn_recharge()
                     self.emergencybt_val = eme_val
-	            self.emergencybt_pub.publish(eme_val)
+                    self.emergencybt_pub.publish(eme_val)
                     self.recharge_ir_pub.publish(rech_val)
-	        except:
+                except:
                     self.emergencybt_val = -1
-		    self.emergencybt_pub.publish(-1)
+                    self.emergencybt_pub.publish(-1)
                     self.recharge_ir_pub.publish(-1)
                     rospy.logerr("get emergencybt  exception")
 
@@ -1010,7 +1010,7 @@ class BaseController:
                 pcloud = PointCloud2()
                 try:
                     stat_, self.sonar_r0, self.sonar_r1, self.sonar_r2, self.sonar_r3, self.sonar_r4,_ = self.Stm32.get_sonar_range()
-		    #self.sonar_r3=80 
+                    #self.sonar_r3=80 
                     #rospy.loginfo("sonar0: " + str(self.sonar_r0)+" sonar1: " + str(self.sonar_r1)+" sonar2: " + str(self.sonar_r2)+" sonar3: " + str(self.sonar_r3)+" sonar4: " + str(self.sonar_r4))  
 
                     sonar0_range = Range()
@@ -1333,27 +1333,27 @@ class BaseController:
             x = 0
 
         if (self.useSonar == True) :
-	    #sonar0
+            #sonar0
             if((self.sonar_r0<=self.safe_range_0 and self.sonar_r0>=2) and (x<0)):
                 x= 0.0
                 rospy.logwarn("sonar0 smaller than safe_range_0, cannot back")
-	    #sonar1
-	    if((self.sonar_r1<=self.safe_range_0 and self.sonar_r1>=2) and (x>0)):
-	        x=0.0
-	        th=0.2
-	        rospy.logwarn("sonar1 smaller than safe_range_0, only trun left")
-	    
-	    if((self.sonar_r1<=self.safe_range_0 and self.sonar_r1>=2) and (th<0)):
-		x=0.0
-		th=0.2
-	    #sonar2
+            #sonar1
+            if((self.sonar_r1<=self.safe_range_0 and self.sonar_r1>=2) and (x>0)):
+                x=0.0
+                th=0.2
+                rospy.logwarn("sonar1 smaller than safe_range_0, only trun left")
+            
+            if((self.sonar_r1<=self.safe_range_0 and self.sonar_r1>=2) and (th<0)):
+                x=0.0
+                th=0.2
+            #sonar2
             if((self.sonar_r2<=self.safe_range_0 and self.sonar_r2>=2) and (x>0)):
                 x=0.0
                 th=0.2
                 rospy.logwarn("sonar2 smaller than safe_range_0, only trun left")
 
-	    #sonar3
-	    if((self.sonar_r3<=self.safe_range_0 and self.sonar_r3>=2) and (x>0)):
+            #sonar3
+            if((self.sonar_r3<=self.safe_range_0 and self.sonar_r3>=2) and (x>0)):
                 x=0.0
                 th=-0.2
                 rospy.logwarn("sonar3 smaller than safe_range_0, only trun left")
@@ -1361,7 +1361,7 @@ class BaseController:
             if((self.sonar_r3<=self.safe_range_0 and self.sonar_r3>=2) and (th>0)):
                 x=0.0
                 th=-0.2
-	    #sonar4
+            #sonar4
             if((self.sonar_r4<=self.safe_range_0 and self.sonar_r0>=2) and (x<0)):
                 x= 0.0
                 rospy.logwarn("sonar4 smaller than safe_range_0, cannot back")
@@ -1370,27 +1370,27 @@ class BaseController:
 
         if x == 0:
             # Turn in place
-	    #print "1111bianhuaqian x=0 , w= "+str(th)
-	    if th>0.0 and th<0.15:
-		th=0.15
-	    elif th>-0.15 and th<0.0:
-		th=-0.15
-	    #print "1111gaibianhou w= "+str(th)
+            #print "1111bianhuaqian x=0 , w= "+str(th)
+            if th>0.0 and th<0.15:
+                th=0.15
+            elif th>-0.15 and th<0.0:
+                th=-0.15
+            #print "1111gaibianhou w= "+str(th)
             right = th * self.wheel_track  * self.gear_reduction / 2.0
             left = -right
         elif th == 0:
-	    #print "222bianhua w=0  v="+str(x)
+            #print "222bianhua w=0  v="+str(x)
             # Pure forward/backward motion
             left = right = x
         else:
             # Rotation about a point in space
-	    #print "3333bianhua qian v,w is not 0, v= "+str(x)+ " w= "+str(th)
-	    '''
+            #print "3333bianhua qian v,w is not 0, v= "+str(x)+ " w= "+str(th)
+            '''
             if (th>0.0 and th<0.2) and (x>-0.05 and x<0.05):
                 th=0.2
-	    if (th>-0.2 and th<0.0) and (x>-0.05 and x<0.05):
+            if (th>-0.2 and th<0.0) and (x>-0.05 and x<0.05):
                 th=-0.2
-	    '''
+            '''
             if (th>0.0 and th<self.start_rotation_limit_w) and (x>-0.1 and x<0):
                 th=self.start_rotation_limit_w
             if (th<0.0 and th >-1.0*self.start_rotation_limit_w) and (x>-0.1 and x<0):

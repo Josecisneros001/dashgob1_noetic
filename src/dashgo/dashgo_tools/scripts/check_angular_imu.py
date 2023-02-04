@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from geometry_msgs.msg import Twist, Quaternion
@@ -39,7 +39,7 @@ class CalibrateAngular():
 
         self.speed = rospy.get_param('~speed', 0.5) # radians per second
         #self.tolerance = radians(rospy.get_param('tolerance', 0.035)) # degrees converted to radians
-	self.tolerance = rospy.get_param('tolerance', 0.0175)
+        self.tolerance = rospy.get_param('tolerance', 0.0175)
         self.odom_angular_scale_correction = rospy.get_param('~odom_angular_scale_correction', 1.0)
         self.start_test = rospy.get_param('~start_test', True)
         
@@ -66,8 +66,8 @@ class CalibrateAngular():
         
         reverse = 1
 
-	current_v=0
-	min_turn_speed=0.15
+        current_v=0
+        min_turn_speed=0.15
         
         while not rospy.is_shutdown():
             if self.start_test:
@@ -83,25 +83,25 @@ class CalibrateAngular():
                 reverse = -reverse
                 
                 while abs(error) > self.tolerance and self.start_test:
-		    #rospy.loginfo(" error = "+str(error)+" tolerance="+str(self.tolerance))	
+                    #rospy.loginfo(" error = "+str(error)+" tolerance="+str(self.tolerance))        
                     if rospy.is_shutdown():
                         return
                     
                     # Rotate the robot to reduce the error
                     move_cmd = Twist()
                     #move_cmd.angular.z = copysign(self.speed, error)
-		    try: 
-		    	current_v =0.2*error;
-		    except:
-			print "current_v ji suan error"
-		    #print "*********current_v = "+ str(current_v)
-		    if math.fabs(current_v) >= self.speed:
-			current_v= self.speed
-		    elif math.fabs(current_v) < min_turn_speed :
-			current_v=min_turn_speed
-		    
-		    move_cmd.angular.z = copysign(math.fabs(current_v), error)
-		    #rospy.loginfo("w= "+str(move_cmd.angular.z)+" error = "+str(error))	
+                    try: 
+                            current_v =0.2*error;
+                    except:
+                        print "current_v ji suan error"
+                    #print "*********current_v = "+ str(current_v)
+                    if math.fabs(current_v) >= self.speed:
+                        current_v= self.speed
+                    elif math.fabs(current_v) < min_turn_speed :
+                        current_v=min_turn_speed
+                    
+                    move_cmd.angular.z = copysign(math.fabs(current_v), error)
+                    #rospy.loginfo("w= "+str(move_cmd.angular.z)+" error = "+str(error))        
                     self.cmd_vel.publish(move_cmd)
                     r.sleep()
                  

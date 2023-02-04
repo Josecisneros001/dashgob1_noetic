@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from geometry_msgs.msg import Twist, Quaternion
@@ -83,18 +83,18 @@ class CalibrateAngular():
                     # Rotate the robot to reduce the error
                     move_cmd = Twist()
                     #move_cmd.angular.z = copysign(self.speed, error)
-		    try: 
-		    	current_v =0.2*error;
-		    except:
-			print "current_v ji suan error"
-		    #print "*********current_v = "+ str(current_v)
-		    if math.fabs(current_v) >= self.speed:
-			current_v= self.speed
-		    elif math.fabs(current_v) < min_turn_speed :
-			current_v=min_turn_speed
-		    
-		    move_cmd.angular.z = copysign(math.fabs(current_v), error)
-		    rospy.loginfo("w= "+str(move_cmd.angular.z)+" error = "+str(error))
+                    try: 
+                            current_v =0.2*error;
+                    except:
+                        print "current_v ji suan error"
+                    #print "*********current_v = "+ str(current_v)
+                    if math.fabs(current_v) >= self.speed:
+                        current_v= self.speed
+                    elif math.fabs(current_v) < min_turn_speed :
+                        current_v=min_turn_speed
+                    
+                    move_cmd.angular.z = copysign(math.fabs(current_v), error)
+                    rospy.loginfo("w= "+str(move_cmd.angular.z)+" error = "+str(error))
 
                     self.cmd_vel.publish(move_cmd)
                     r.sleep()

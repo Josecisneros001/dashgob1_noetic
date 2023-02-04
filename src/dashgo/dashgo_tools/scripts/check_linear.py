@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from geometry_msgs.msg import Twist, Point
@@ -82,16 +82,16 @@ class CalibrateLinear():
                     # If not, move in the appropriate direction
                     #move_cmd.linear.x = copysign(self.speed, -1 * error)
                     try: 
-		    	linear_v =0.5*error;
-		    except:
-			rospy.loginfo("linear_v ji suan error")
-		    #rospy.loginfo("linear_v = "+ str(linear_v)+" self.speed="+str(self.speed))
+                            linear_v =0.5*error;
+                    except:
+                        rospy.loginfo("linear_v ji suan error")
+                    #rospy.loginfo("linear_v = "+ str(linear_v)+" self.speed="+str(self.speed))
 
                     #rospy.loginfo("self.speed "+str(self.speed))
-		    if math.fabs(linear_v) >= math.fabs(self.speed):
-			linear_v= self.speed
-		    elif math.fabs(linear_v) < math.fabs(start_slow_speed) :
-			linear_v=min_linear_speed
+                    if math.fabs(linear_v) >= math.fabs(self.speed):
+                        linear_v= self.speed
+                    elif math.fabs(linear_v) < math.fabs(start_slow_speed) :
+                        linear_v=min_linear_speed
                     else:
                         pass 
                     #rospy.loginfo("****linear_v = "+ str(linear_v)+" self.speed="+str(self.speed))

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import time,os,math,struct
 from math import pi
 
@@ -38,7 +38,7 @@ class Magnetometer:
             self.port = Serial(port=port, baudrate=baudrate, timeout=timeout, writeTimeout=writeTimeout)
             time.sleep(0.1)
         except SerialException:
-            print "Serial Exception"
+            print("Serial Exception")
             os._exit(1)
 
         #cmd_init = (struct.pack("4B",0xD6,0x6D,0x01,0x01))  #init

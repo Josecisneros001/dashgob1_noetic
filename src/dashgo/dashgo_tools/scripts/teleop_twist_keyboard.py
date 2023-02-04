@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import roslib; roslib.load_manifest('teleop_twist_keyboard')
 import rospy
 
@@ -83,22 +83,22 @@ if __name__=="__main__":
 	status = 0
 
 	try:
-		print msg
-		print vels(speed,turn)
+		print(msg)
+		print(vels(speed,turn))
 		while(1):
 			key = getKey()
-			if key in moveBindings.keys():
+			if key in list(moveBindings.keys()):
 				x = moveBindings[key][0]
 				y = moveBindings[key][1]
 				z = moveBindings[key][2]
 				th = moveBindings[key][3]
-			elif key in speedBindings.keys():
+			elif key in list(speedBindings.keys()):
 				speed = speed * speedBindings[key][0]
 				turn = turn * speedBindings[key][1]
 
-				print vels(speed,turn)
+				print(vels(speed,turn))
 				if (status == 14):
-					print msg
+					print(msg)
 				status = (status + 1) % 15
 			else:
 				x = 0
@@ -114,7 +114,7 @@ if __name__=="__main__":
 			pub.publish(twist)
 
 	except:
-		print e
+		print(e)
 
 	finally:
 		twist = Twist()
