@@ -86,7 +86,7 @@ class CalibrateAngular():
                     try: 
                             current_v =0.2*error;
                     except:
-                        print "current_v ji suan error"
+                        print("current_v ji suan error")
                     #print "*********current_v = "+ str(current_v)
                     if math.fabs(current_v) >= self.speed:
                         current_v= self.speed

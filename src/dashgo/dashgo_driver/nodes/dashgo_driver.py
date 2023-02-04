@@ -4,7 +4,7 @@
 import rospy
 from geometry_msgs.msg import Twist
 import os, time
-import thread
+import _thread
 
 import math
 from math import pi as PI, degrees, radians, sin, cos
@@ -100,7 +100,7 @@ class Stm32:
         self.receive_message_length_ = 0
     
         # Keep things thread safe
-        self.mutex = thread.allocate_lock()
+        self.mutex = _thread.allocate_lock()
             
         # An array to cache analog sensor readings
         self.analog_sensor_cache = [None] * self.N_ANALOG_PORTS
@@ -110,7 +110,7 @@ class Stm32:
     
     def connect(self):
         try:
-            print "Connecting to Stm32 on port", self.port, "..."
+            print("Connecting to Stm32 on port", self.port, "...")
             self.port = Serial(port=self.port, baudrate=self.baudrate, timeout=self.timeout, writeTimeout=self.writeTimeout)
             # The next line is necessary to give the firmware time to wake up.
             time.sleep(1)
@@ -120,15 +120,15 @@ class Stm32:
                 state_, val  = self.get_baud()   
                 if val != self.baudrate:
                     raise SerialException
-            print "Connected at", self.baudrate
-            print "Stm32 is ready."
+            print("Connected at", self.baudrate)
+            print("Stm32 is ready.")
 
         except SerialException:
-            print "Serial Exception:"
-            print sys.exc_info()
-            print "Traceback follows:"
+            print("Serial Exception:")
+            print(sys.exc_info())
+            print("Traceback follows:")
             traceback.print_exc(file=sys.stdout)
-            print "Cannot connect to Stm32!"
+            print("Cannot connect to Stm32!")
             os._exit(1)
 
     def open(self): 
@@ -250,11 +250,11 @@ class Stm32:
                     res = self.recv(self.timeout)
                     #print "response : " + str(binascii.b2a_hex(res))
                 except:
-                    print "Exception executing command: " + str(binascii.b2a_hex(cmd))
+                    print("Exception executing command: " + str(binascii.b2a_hex(cmd)))
                 attempts += 1
         except:
             self.mutex.release()
-            print "Exception executing command: " + str(binascii.b2a_hex(cmd))
+            print("Exception executing command: " + str(binascii.b2a_hex(cmd)))
             return 0
         
         self.mutex.release()
@@ -448,7 +448,7 @@ class Stm32:
         '''
         cmd_str=struct.pack("6B", self.HEADER0, self.HEADER1, 0x03, 0x10, 0x01, 0x00) + struct.pack("B", 0x14)
         if (self.execute(cmd_str))==1 and self.payload_ack == '\x00':
-           print "start"
+           print("start")
            return  self.SUCCESS
         else:
            return self.FAIL
@@ -458,7 +458,7 @@ class Stm32:
         '''
         cmd_str=struct.pack("6B", self.HEADER0, self.HEADER1, 0x03, 0x10, 0x00, 0x00) + struct.pack("B", 0x13)
         if (self.execute(cmd_str))==1 and self.payload_ack == '\x00':
-           print "stop"
+           print("stop")
            return  self.SUCCESS
         else:
            return self.FAIL
@@ -979,7 +979,7 @@ class BaseController:
                 self.recharge_way = way
                 #self.recharge_way_pub.publish(ways)
                 self.recharge_way_pub.publish(self.recharge_way)
-            except Exception,e:
+            except Exception as e:
                 #print str(e)
                 self.recharge_way_pub.publish(-1)
                 rospy.logerr("get recharge_way  exception")
@@ -1447,7 +1447,7 @@ class Stm32ROS():
         rospy.loginfo("Connected to Stm32 on port " + self.port + " at " + str(self.baud) + " baud")
      
         # Reserve a thread lock
-        mutex = thread.allocate_lock()
+        mutex = _thread.allocate_lock()
               
         # Initialize the base controller if used
         if self.use_base_controller:
