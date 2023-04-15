@@ -55,7 +55,7 @@ class GetScanData():
             p.y=map_y
             p.z=0
 
-            self.pcloud.points.append(p);
+            self.pcloud.points.append(p)
 
         #self.pcloud = pc2.create_cloud_xyz32(self.pcloud.header, self.andriod_scan_pcloud)
         self.scan_pub_cloud.publish(self.pcloud)

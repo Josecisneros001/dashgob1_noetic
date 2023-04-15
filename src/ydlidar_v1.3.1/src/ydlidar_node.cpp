@@ -61,7 +61,7 @@ void publish_scan(ros::Publisher *pub,  node_info *nodes,  size_t node_count, ro
             if(ignore_array.size() != 0){
                 float angle = angle_min + pos*(angle_max - angle_min)/(double)counts;
 	            for(uint16_t j = 0; j < ignore_array.size();j = j+2){
-                    if((ignore_array[j] <= angle) && (angle <= ignore_array[j+1])){
+                    if((ignore_array[j] < angle) && (angle <= ignore_array[j+1])){
 		                range = 0.0;
 		                break;
 		            }
@@ -441,10 +441,10 @@ again:
     if(type !=4){
 	    intensities_ = false;
     }else{
+        intensities_ = true;
         if(baudrate != 153600){
             intensities_ = false;
-        }else{
-        intensities_ = true;}
+        }
     }
 
 
@@ -486,6 +486,13 @@ again:
             }
 
         }
+
+        if(_frequency < 7 && samp_rate>6){
+            nodes_count = 1600;
+
+        }else if( _frequency < 6&&samp_rate == 9){
+            nodes_count = 1800;
+        }
     }
 
     result_t ans=YDlidarDriver::singleton()->startScan();
@@ -506,7 +513,10 @@ again:
     double scan_duration;
     ros::Rate rate(30);
 
+
+
     int max_nodes_count = nodes_count;
+    each_angle = 360.0/nodes_count;
 
     while (ros::ok()) {
         try{

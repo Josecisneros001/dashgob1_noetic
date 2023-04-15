@@ -1148,15 +1148,15 @@ class BaseController:
                     imu_data = Imu()  
                     imu_data.header.stamp = rospy.Time.now()
                     imu_data.header.frame_id = self.imu_frame_id 
-                    imu_data.orientation_covariance[0] = 1000000;
-                    imu_data.orientation_covariance[1] = 0;
-                    imu_data.orientation_covariance[2] = 0;
-                    imu_data.orientation_covariance[3] = 0;
-                    imu_data.orientation_covariance[4] = 1000000;
-                    imu_data.orientation_covariance[5] = 0;
-                    imu_data.orientation_covariance[6] = 0;
-                    imu_data.orientation_covariance[7] = 0;
-                    imu_data.orientation_covariance[8] = 0.000001;
+                    imu_data.orientation_covariance[0] = 1000000
+                    imu_data.orientation_covariance[1] = 0
+                    imu_data.orientation_covariance[2] = 0
+                    imu_data.orientation_covariance[3] = 0
+                    imu_data.orientation_covariance[4] = 1000000
+                    imu_data.orientation_covariance[5] = 0
+                    imu_data.orientation_covariance[6] = 0
+                    imu_data.orientation_covariance[7] = 0
+                    imu_data.orientation_covariance[8] = 0.000001
                     imu_quaternion = Quaternion()
                     imu_quaternion.x = 0.0 
                     imu_quaternion.y = 0.0
@@ -1166,9 +1166,9 @@ class BaseController:
                     imu_data.linear_acceleration_covariance[0] = -1
                     imu_data.angular_velocity_covariance[0] = -1
 
-                    imu_data.angular_velocity.x = 0.0;
-                    imu_data.angular_velocity.y = 0.0;
-                    imu_data.angular_velocity.z = (yaw_vel*3.1416/(180*100));
+                    imu_data.angular_velocity.x = 0.0
+                    imu_data.angular_velocity.y = 0.0
+                    imu_data.angular_velocity.z = (yaw_vel*3.1416/(180*100))
                     self.imuPub.publish(imu_data)
                     self.imuAnglePub.publish(-1*self.imu_offset*yaw*3.1416/(180 *2.0))
        

@@ -5,8 +5,9 @@
   </node>
 
   <node pkg="tf" type="static_transform_publisher" name="imu_broadcaster" args="0 0 0 0 0 0 base_footprint imu_base 100" respawn="true" />
-
-  <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
+  
+  <include file="$(find nav_main)/launch/odom.launch" />
+  <!-- <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
     <param name="output_frame" value="odom_combined"/>
     <param name="base_footprint_frame" value="base_footprint"/>
     <param name="freq" value="10.0"/>
@@ -17,7 +18,7 @@
     <param name="debug" value="true"/>
     <remap from="imu_data" to="imu" />
     <remap from="robot_pose_ekf/odom_combined" to="odom_combined"/>  
-  </node>
+  </node> -->
 
   <arg name="node_name"             value="velocity_smoother"/>
   <arg name="nodelet_manager_name"  value="nodelet_manager"/>
@@ -31,7 +32,7 @@
   <node pkg="nodelet" type="nodelet" name="$(arg nodelet_manager_name)" args="manager" respawn="true"/>
   
   <!-- velocity smoother -->
-  <include file="$(find yocs_velocity_smoother)/launch/velocity_smoother.launch">
+  <!-- <include file="$(find yocs_velocity_smoother)/launch/velocity_smoother.launch">
     <arg name="node_name"             value="$(arg node_name)"/>
     <arg name="nodelet_manager_name"  value="$(arg nodelet_manager_name)"/>
     <arg name="config_file"           value="$(arg config_file)"/>
@@ -39,7 +40,26 @@
     <arg name="smooth_cmd_vel_topic"  value="$(arg smooth_cmd_vel_topic)"/>
     <arg name="robot_cmd_vel_topic"   value="$(arg robot_cmd_vel_topic)"/>
     <arg name="odom_topic"            value="$(arg odom_topic)"/>
-  </include>
+  </include> -->
+  <node pkg="yocs_velocity_smoother" type="yocs_velocity_smoother_node" name="$(arg node_name)" output="screen">
+    <param name="node_name"             value="$(arg node_name)"/>
+    <param name="nodelet_manager_name"  value="$(arg nodelet_manager_name)"/>
+    <param name="config_file"           value="$(arg config_file)"/>
+    <param name="raw_cmd_vel_topic"     value="$(arg raw_cmd_vel_topic)"/>
+    <param name="smooth_cmd_vel_topic"  value="$(arg smooth_cmd_vel_topic)"/>
+    <param name="robot_cmd_vel_topic"   value="$(arg robot_cmd_vel_topic)"/>
+    <param name="odom_topic"            value="$(arg odom_topic)"/>    
+    <!-- parameters -->
+    <rosparam file="$(arg config_file)" command="load"/>
+
+    <!-- velocity commands I/O -->
+    <remap from="$(arg node_name)/raw_cmd_vel"    to="$(arg raw_cmd_vel_topic)"/>
+    <remap from="$(arg node_name)/smooth_cmd_vel" to="$(arg smooth_cmd_vel_topic)"/>
+
+    <!-- Robot velocity feedbacks -->
+    <remap from="$(arg node_name)/robot_cmd_vel"  to="$(arg robot_cmd_vel_topic)"/>
+    <remap from="$(arg node_name)/odometry"       to="$(arg odom_topic)"/>
+  </node>
   <node name="dashgo_action" pkg="dashgo_tools" type="check_action.py" output="screen" respawn="true"/>
   <!-- node name="magnetometer" pkg="dashgo_tools" type="magnetometer.py" output="screen" respawn="true"/-->
  
